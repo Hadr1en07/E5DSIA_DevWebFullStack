@@ -2,10 +2,10 @@ package com.edition.config;
 
 import com.edition.model.Book;
 import com.edition.model.BookCategory;
+import com.edition.model.Role;
 import com.edition.model.User;
 import com.edition.repository.BookRepository;
 import com.edition.repository.UserRepository;
-import com.edition.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,114 +23,136 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        seedUsers();
+        seedBooks();
+    }
 
-        // === USERS ===
+    private void seedUsers() {
+        // Admin
         if (!userRepository.existsByUsername("admin")) {
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole(Role.ROLE_ADMIN);
+            User admin = User.builder()
+                    .username("admin")
+                    .password(passwordEncoder.encode("admin123"))
+                    .role(Role.ROLE_ADMIN)
+                    .build();
             userRepository.save(admin);
             System.out.println(">>> Utilisateur admin créé: admin / admin123");
+        } else {
+            System.out.println(">>> Admin déjà présent (seed ignoré)");
         }
 
+        // User
         if (!userRepository.existsByUsername("user")) {
-            User user = new User();
-            user.setUsername("user");
-            user.setPassword(passwordEncoder.encode("user123"));
-            user.setRole(Role.ROLE_USER);
+            User user = User.builder()
+                    .username("user")
+                    .password(passwordEncoder.encode("user123"))
+                    .role(Role.ROLE_USER)
+                    .build();
             userRepository.save(user);
-            System.out.println(">>> Utilisateur user créé: user / user123");
-        }
-
-        // === BOOKS ===
-        if (bookRepository.count() == 0) {
-            List<Book> demo = List.of(
-                    Book.builder()
-                            .title("Les Misérables")
-                            .author("Victor Hugo")
-                            .isbn("978-0000000001")
-                            .price(14.90)
-                            .category(BookCategory.ROMAN)
-                            .publicationYear(1862)
-                            .description("Un grand classique de la littérature française.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/8231856-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Les Fleurs du mal")
-                            .author("Charles Baudelaire")
-                            .isbn("978-0000000002")
-                            .price(10.50)
-                            .category(BookCategory.POESIE)
-                            .publicationYear(1857)
-                            .description("Recueil poétique majeur du XIXe siècle.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/10523344-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Phèdre")
-                            .author("Jean Racine")
-                            .isbn("978-0000000003")
-                            .price(8.90)
-                            .category(BookCategory.THEATRE)
-                            .publicationYear(1677)
-                            .description("Tragédie classique en cinq actes.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/10510734-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Du contrat social")
-                            .author("Jean-Jacques Rousseau")
-                            .isbn("978-0000000004")
-                            .price(9.90)
-                            .category(BookCategory.ESSAI)
-                            .publicationYear(1762)
-                            .description("Essai politique fondateur.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/11153206-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Mémoires d'outre-tombe")
-                            .author("Chateaubriand")
-                            .isbn("978-0000000005")
-                            .price(16.00)
-                            .category(BookCategory.BIOGRAPHIE)
-                            .publicationYear(1848)
-                            .description("Autobiographie monumentale.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/12015514-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Germinal")
-                            .author("Émile Zola")
-                            .isbn("978-0000000006")
-                            .price(12.80)
-                            .category(BookCategory.ROMAN)
-                            .publicationYear(1885)
-                            .description("Roman social sur le monde ouvrier.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/8231857-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Cyrano de Bergerac")
-                            .author("Edmond Rostand")
-                            .isbn("978-0000000007")
-                            .price(11.20)
-                            .category(BookCategory.THEATRE)
-                            .publicationYear(1897)
-                            .description("Comédie héroïque en vers.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/10510745-L.jpg")
-                            .build(),
-                    Book.builder()
-                            .title("Essais")
-                            .author("Michel de Montaigne")
-                            .isbn("978-0000000008")
-                            .price(15.40)
-                            .category(BookCategory.ESSAI)
-                            .publicationYear(1580)
-                            .description("Réflexions humanistes, personnelles et philosophiques.")
-                            .coverUrl("https://covers.openlibrary.org/b/id/11153210-L.jpg")
-                            .build()
-            );
-
-            bookRepository.saveAll(demo);
-            System.out.println(">>> 8 livres de démonstration créés");
+            System.out.println(">>> Utilisateur demo créé: user / user123");
         }
     }
-}
 
+    private void seedBooks() {
+        List<Book> demo = List.of(
+                Book.builder()
+                        .title("Les Misérables")
+                        .author("Victor Hugo")
+                        .isbn("978-1234567890")
+                        .price(19.90)
+                        .description("Un classique de la littérature française.")
+                        .category(BookCategory.ROMAN)
+                        .publicationYear(1862)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Les Fleurs du mal")
+                        .author("Charles Baudelaire")
+                        .isbn("978-1234567891")
+                        .price(12.50)
+                        .description("Recueil majeur de poésie.")
+                        .category(BookCategory.POESIE)
+                        .publicationYear(1857)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Cyrano de Bergerac")
+                        .author("Edmond Rostand")
+                        .isbn("978-1234567892")
+                        .price(14.00)
+                        .description("Pièce de théâtre en vers.")
+                        .category(BookCategory.THEATRE)
+                        .publicationYear(1897)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Discours de la méthode")
+                        .author("René Descartes")
+                        .isbn("978-1234567893")
+                        .price(9.90)
+                        .description("Texte fondateur de la philosophie moderne.")
+                        .category(BookCategory.ESSAI)
+                        .publicationYear(1637)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Mémoires d’outre-tombe")
+                        .author("Chateaubriand")
+                        .isbn("978-1234567894")
+                        .price(18.00)
+                        .description("Autobiographie monumentale.")
+                        .category(BookCategory.BIOGRAPHIE)
+                        .publicationYear(1848)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Germinal")
+                        .author("Émile Zola")
+                        .isbn("978-1234567895")
+                        .price(11.90)
+                        .description("Roman naturaliste sur le monde ouvrier.")
+                        .category(BookCategory.ROMAN)
+                        .publicationYear(1885)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Le Cid")
+                        .author("Pierre Corneille")
+                        .isbn("978-1234567896")
+                        .price(10.00)
+                        .description("Tragi-comédie classique.")
+                        .category(BookCategory.THEATRE)
+                        .publicationYear(1637)
+                        .coverUrl(null)
+                        .build(),
+
+                Book.builder()
+                        .title("Essais")
+                        .author("Montaigne")
+                        .isbn("978-1234567897")
+                        .price(16.50)
+                        .description("Réflexions sur l’humanité et soi-même.")
+                        .category(BookCategory.ESSAI)
+                        .publicationYear(1580)
+                        .coverUrl(null)
+                        .build()
+        );
+
+        int inserted = 0;
+        for (Book b : demo) {
+            // Important: ne pas re-insérer si ISBN déjà présent (évite crash UNIQUE)
+            if (!bookRepository.existsByIsbn(b.getIsbn())) {
+                bookRepository.save(b);
+                inserted++;
+            }
+        }
+
+        System.out.println(">>> Seed livres vérifié (insert si manquant). Ajoutés=" + inserted);
+    }
+}

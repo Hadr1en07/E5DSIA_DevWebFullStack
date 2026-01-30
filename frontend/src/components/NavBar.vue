@@ -27,6 +27,7 @@ function logout() {
         <RouterLink to="/" class="link">Accueil</RouterLink>
         <RouterLink to="/books" class="link">Catalogue</RouterLink>
         <RouterLink v-if="admin" to="/admin" class="link">Admin</RouterLink>
+        <RouterLink to="/cv" class="link">CV</RouterLink>
       </nav>
 
       <div class="right">
