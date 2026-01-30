@@ -1,6 +1,26 @@
-#type of files to ignore
-__pycache__/
-app/__pycache__/
-app/routers/__pycache__/
+# === OS / IDE ===
 .DS_Store
-*/.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# === Logs ===
+*.log
+
+# === Frontend (Vue/Vite) ===
+edition/frontend/node_modules/
+edition/frontend/dist/
+edition/frontend/.vite/
+edition/frontend/.env
+edition/frontend/.env.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Backend (Spring/Maven) ===
+edition/backend/target/
+edition/backend/.mvn/wrapper/maven-wrapper.jar
+
+# === Secrets prod (NE PAS COMMIT) ===
+edition/backend/src/main/resources/application-prod.properties
